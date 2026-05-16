@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TikTokRewind — OAuth Callback</title>
+<meta name="robots" content="noindex">
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         background: #0a0a0a; color: #eee; margin: 0; padding: 0;
+         min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 12px;
+          padding: 32px 36px; max-width: 560px; width: 92%; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+  h1 { margin: 0 0 6px; font-size: 22px; }
+  h1 .tt { color: #FE2C55; } h1 .rw { color: #25F4EE; }
+  .sub { color: #999; margin-bottom: 24px; font-size: 14px; }
+  .label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 16px; }
+  .code { background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 8px;
+          padding: 14px 16px; margin-top: 6px; font-family: "SF Mono", Consolas, monospace;
+          font-size: 13px; word-break: break-all; color: #fff; min-height: 18px; }
+  button { background: linear-gradient(90deg, #FE2C55, #25F4EE); border: 0; color: #000;
+           padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 14px;
+           cursor: pointer; margin-top: 18px; }
+  button:active { opacity: 0.7; }
+  .ok { color: #25F4EE; font-size: 13px; margin-top: 10px; min-height: 16px; }
+  .err { color: #FE2C55; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1><span class="tt">TikTok</span><span class="rw">Rewind</span> · OAuth</h1>
+    <div class="sub">Copy the values below and paste them into your terminal.</div>
+
+    <div class="label">Authorization Code</div>
+    <div class="code" id="code">(waiting...)</div>
+    <button id="copyCode">Copy code</button>
+
+    <div class="label">State (verify match)</div>
+    <div class="code" id="state">(waiting...)</div>
+
+    <div class="ok" id="status"></div>
+
+    <div class="label">Error (if any)</div>
+    <div class="code err" id="error">none</div>
+  </div>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get("code");
+    var state = params.get("state");
+    var error = params.get("error") || params.get("error_description");
+
+    document.getElementById("code").textContent = code || "(no code in URL)";
+    document.getElementById("state").textContent = state || "(no state in URL)";
+    document.getElementById("error").textContent = error || "none";
+
+    document.getElementById("copyCode").addEventListener("click", function () {
+      if (!code) return;
+      navigator.clipboard.writeText(code).then(function () {
+        document.getElementById("status").textContent = "Copied. Paste into the CLI prompt.";
+      }, function () {
+        document.getElementById("status").textContent = "Clipboard blocked — select and copy manually.";
+      });
+    });
+  })();
+</script>
+</body>
+</html>
